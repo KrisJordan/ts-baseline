@@ -1,0 +1,11 @@
+html
+    head
+        title= project
+    body
+        h1= project + " " + main
+        ul
+            each file in files
+                li
+                    a(href=file)= file
+        script(src="/vendor/devServerClient.js")
+        script(src=script)
