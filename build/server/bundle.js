@@ -16,7 +16,7 @@ module.exports = function () {
   // compiler.plugin('compile', function() {
   //   console.log('Bundling...');
   //   bundleStart = Date.now();
-  // });
+  //  });
 
   // We also give notice when it is done compiling, including the
   // time it took. Nice to have
@@ -45,8 +45,14 @@ module.exports = function () {
 
   // We fire up the development server and give notice in the terminal
   // that we are starting the initial bundle
-  bundler.listen(8080, 'localhost', function () {
-    console.log('Bundling project, please wait...');
-  });
+  bundler.listen(8080, 'localhost', function () {});
+
+  // Surface a method that allows us to rerun the bundler on demand.
+  this.run = function() {
+    // compiler.run(function(err, stats) {});
+    bundler.invalidate();
+  };
+
+  return this;
 
 };

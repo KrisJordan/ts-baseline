@@ -1,0 +1,16 @@
+extends layout.pug
+
+block nav
+    a(href="/") Home
+    |
+    | /
+    |
+    strong= title
+
+block content
+    ul.directory
+        each file in files
+            li
+                a(href=file.path)= file.title
+        else
+            .info No <code>main</code> files were found. Please add a TypeScript file whose suffix is <code>-main.ts</code> in order for it to show here.

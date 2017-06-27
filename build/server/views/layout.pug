@@ -1,0 +1,13 @@
+html
+    head
+        title= project
+        link(rel="stylesheet", href="/style/shell.css")
+    body
+        nav
+            h1
+                block   nav
+            block close
+                a.quit(href="/close") Close
+        block content
+        block scripts
+            script(src="/vendor/devServerClient.js")

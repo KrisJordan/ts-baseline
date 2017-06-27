@@ -1,0 +1,18 @@
+extends layout.pug
+
+block nav
+    a(href="/") Home
+    |
+    | /
+    |
+    a(href=projectPath)= projectTitle
+    |
+    | /
+    |
+    strong= title
+
+block content
+    .container
+
+block append scripts
+    script(src=script)

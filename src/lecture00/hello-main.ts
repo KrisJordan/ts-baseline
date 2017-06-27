@@ -1,5 +1,7 @@
 import foo from "./test";
-import "./playground";
+
+let name: string = "";
+let length: number = 0;
 
 function main(): void {
     let x = 10;
