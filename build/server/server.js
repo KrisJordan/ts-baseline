@@ -86,7 +86,7 @@ if (!isProduction) {
         res.redirect(`/`);
       } else {
         bundle.run();
-        glob("./src/" + req.params.project + "/*-main.ts", function(err, files) {
+        glob("./src/" + req.params.project + "/*-app.ts", function(err, files) {
           props.script = "";
           props.files = files.map(pathToProgram);
           props.title = english(props.project);
@@ -97,21 +97,21 @@ if (!isProduction) {
   });
 
   function pathToProgram(path) {
-    let match = /\.\/src\/(.*)\/(.+)-main.ts$/.exec(path);
+    let match = /\.\/src\/(.*)\/(.+)-app.ts$/.exec(path);
     return {title: english(match[2]), path: `/${match[1]}/${match[2]}`};
   }
 
-  app.get("/:project/:main", function(req, res, next) {
+  app.get("/:project/:app", function(req, res, next) {
     let props = req.params;
-    fs.access(`./src/${props.project}/${props.main}-main.ts`, fs.constants.F_OK, (err) => {
+    fs.access(`./src/${props.project}/${props.app}-app.ts`, fs.constants.F_OK, (err) => {
       if (err) {
         res.redirect(`/${props.project}`);
       } else {
         bundle.run();
-        glob("./src/*/*-main.ts", function(err, files) {
-          props.script = "/dist/" + req.params.project + "-" + req.params.main + ".js";
+        glob("./src/*/*-app.ts", function(err, files) {
+          props.script = "/dist/" + req.params.project + "-" + req.params.app + ".js";
           props.files = files.map(pathToBundle);
-          props.title = english(props.main);
+          props.title = english(props.app);
           props.projectTitle = english(props.project);
           props.projectPath = `/${props.project}`;
           res.render('program', props);
@@ -123,7 +123,7 @@ if (!isProduction) {
 }
 
 function pathToBundle(path) {
-  let match = /\.\/src\/(.*)-main.ts$/.exec(path);
+  let match = /\.\/src\/(.*)-app.ts$/.exec(path);
   return "/" + match[1];
 }
 
