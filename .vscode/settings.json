@@ -8,7 +8,10 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/.vscode": true,
-        "**/.gitignore": true
+        "**/.gitignore": true,
+        "**/build": true,
+        "package.json": true,
+        "tsconfig.json": true
     },
     "editor.minimap.enabled": false
 }
