@@ -1,4 +1,4 @@
-import "introcs/console";
+import "introcs";
 
 function main() {
     promptString("What is your name?", handleName);

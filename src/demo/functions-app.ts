@@ -1,4 +1,4 @@
-import "introcs/console";
+import "introcs";
 
 function main() {
     print("Hello, again.");
