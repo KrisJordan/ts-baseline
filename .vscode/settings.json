@@ -11,7 +11,8 @@
         "**/.gitignore": true,
         "**/build": true,
         "package.json": true,
-        "tsconfig.json": true
+        "tsconfig.json": true,
+        "tslint.json": true
     },
     "editor.minimap.enabled": false
 }
