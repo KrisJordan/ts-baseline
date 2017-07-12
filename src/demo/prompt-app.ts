@@ -15,13 +15,14 @@ function handleAge(age: number) {
     promptBoolean("True or False: The Earth is flat.", handleFlatness);
 }
 
-function handleFlatness(flatness: boolean) {
+function handleFlatness(isFlat: boolean) {
     clear();
-    if (!flatness) {
+    if (!isFlat) {
         print("Great work!!!");
         image("https://media.giphy.com/media/tBb19faQdmuOHmwGRPy/giphy.gif");
     } else {
         print("Ummm... try again...");
+        image("https://media.giphy.com/media/g69ZPJfLy7hD2/giphy.gif");
         main();
     }
 }
