@@ -5,7 +5,7 @@ let balance: number = 0;
 function main() {
     print("Your balance is " + balance);
     print("What would you like to do?");
-    print("Enter 1 for deposit.")
+    print("Enter 1 for deposit.");
     print("Enter 2 for withdraw.");
     promptNumber("Your selection", decide);
 }
@@ -13,7 +13,7 @@ function main() {
 function decide(choice: number) {
     if (choice === 1) {
         promptNumber("How much would you like to deposit?", deposit);
-    } else if(choice === 2) {
+    } else if (choice === 2) {
         promptNumber("How much would you like to withdraw?", withdraw);
     } else {
         print("Invalid selection.");
