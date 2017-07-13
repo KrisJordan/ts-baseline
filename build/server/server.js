@@ -43,6 +43,7 @@ if (!isProduction) {
     glob("./src/*", function(err, files) {
       let props = req.params;
       props.files = files.map(pathToProject).reduce(uniq, []);
+      props.pageTitle = "Introduction to Computer Science";
       res.render('index', props);
     });
   });
@@ -68,8 +69,16 @@ if (!isProduction) {
   }
 
   function english(camelCase) {
-    let text = camelCase.replace(/([A-Z])/g, " $1").replace(/([a-z])([0-9])/g, "$1 $2");
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    let text = camelCase.replace(/.([A-Z])/g, " $1")
+                        .replace(/([a-z])([0-9])/g, "$1 $2")
+                        .replace(/-([a-z0-9])/g, " $1")
+                        ;
+    let space = 0;
+    do  {
+      text = text.slice(0, space) + text.charAt(space).toUpperCase() + text.slice(space + 1);
+      space = text.indexOf(" ", space + 1) + 1;
+    } while (space != 0);
+    return text;
   }
 
   function toObject(kvPairs) {
@@ -90,6 +99,7 @@ if (!isProduction) {
           props.script = "";
           props.files = files.map(pathToProgram);
           props.title = english(props.project);
+          props.pageTitle = english(props.project);
           res.render('project', props);
         });
       }
@@ -111,6 +121,7 @@ if (!isProduction) {
         glob("./src/*/*-app.ts", function(err, files) {
           props.script = "/dist/" + req.params.project + "-" + req.params.app + ".js";
           props.files = files.map(pathToBundle);
+          props.pageTitle = english(props.app) + " (" + english(props.project) + ")";
           props.title = english(props.app);
           props.projectTitle = english(props.project);
           props.projectPath = `/${props.project}`;
