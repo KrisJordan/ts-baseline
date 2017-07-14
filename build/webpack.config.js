@@ -1,5 +1,8 @@
 const path = require("path");
 const glob = require("glob");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extract = new ExtractTextPlugin("[name].css");
 
 module.exports = {
     devtool: 'inline-source-map',
@@ -19,13 +22,21 @@ module.exports = {
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.tsx?$/,
                 loader: "ts-loader",
+                exclude: /node_modules/,
                 options: {
                     logLevel: "error"
                 }
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader"
+                })
             }
         ]
     },
@@ -33,5 +44,8 @@ module.exports = {
         filename: "[name].js",
         path: path.resolve(__dirname, "public/dist")
     },
-    stats: "errors-only"
+    stats: "errors-only",
+    plugins: [
+        extract
+    ]
 };

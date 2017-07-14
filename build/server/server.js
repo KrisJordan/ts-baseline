@@ -120,6 +120,7 @@ if (!isProduction) {
         bundle.run();
         glob("./src/*/*-app.ts", function(err, files) {
           props.script = "/dist/" + req.params.project + "-" + req.params.app + ".js";
+          props.style = "/dist/" + req.params.project + "-" + req.params.app + ".css";
           props.files = files.map(pathToBundle);
           props.pageTitle = english(props.app) + " (" + english(props.project) + ")";
           props.title = english(props.app);
