@@ -3,6 +3,16 @@ extends layout.pug
 block styles
     link(rel="stylesheet", href=style)
 
+block meta
+    meta(name="HandheldFriendly" content="True")
+    meta(name="MobileOptimized" content="320")
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+    meta(name="cleartype" content="on")
+    meta(name="mobile-web-app-capable" content="yes")
+    meta(name="apple-mobile-web-capable" content="yes")
+    meta(name="apple-mobile-web-app-title" content=title)
+    meta(name="apple-mobile-web-app-status-bar-style" content="black")
+
 block nav
     a(href="/") Home
     |
