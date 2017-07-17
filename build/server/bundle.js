@@ -40,7 +40,10 @@ module.exports = function () {
     quiet: false,
     noInfo: true,
     stats: "errors-only",
-    clientLogLevel: "warning"
+    clientLogLevel: "warning",
+    headers: {
+        'Access-Control-Allow-Origin': '*'
+    }
   });
 
   // We fire up the development server and give notice in the terminal

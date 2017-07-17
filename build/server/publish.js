@@ -5,35 +5,58 @@ const uglify = require('uglifyjs-webpack-plugin');
 const pug = require("pug");
 const zipFolder = require("zip-folder");
 const mkdirp = require("mkdirp");
+const FormData = require('form-data');
+const Promise = require("bluebird");
 
-function publish(project, app) {
+function publish(username, project, app) {
+    return new Promise( (resolve, reject) => {
+        let date = getDateString();
+        let timestamp = Math.floor(Date.now() / 1000);
+        let folder = date + "-" + project + "-" + app + "-" + timestamp;
+        let target = path.join("../publish", folder); 
 
-    let date = getDateString();
-    let timestamp = Math.floor(Date.now() / 1000);
-    let folder = date + "-" + project + "-" + app + "-" + timestamp;
-    let target = path.join("../publish", folder); 
+        let srcDir = mkdir(target, "src");
+        let publicDir = mkdir(target, "public");
+        let targetDir = path.join(__dirname, target);
 
-    let srcDir = mkdir(target, "src");
-    let publicDir = mkdir(target, "public");
-    let targetDir = path.join(__dirname, target);
+        let sourceWatcher = new SourceWatcher();
 
-    let sourceWatcher = new SourceWatcher();
+        let process = compile(sourceWatcher, project, app, publicDir)
+            .then(bundleSources(sourceWatcher, srcDir))
+            .then(generateHtml(project, app, publicDir))
+            .then(zipBundle(targetDir))
+            .then((bundle) => publishBundle(username, project, app, bundle))
+            .then(resolve)
+            .catch(reject);
+    });
+}
 
-    let process = compile(sourceWatcher, project, app, publicDir)
-        .then(bundleSources(sourceWatcher, srcDir))
-        .then(generateHtml(project, app, publicDir))
-        .then(zipBundle(targetDir))
-        .then(() => console.info("Done!"));
+function publishBundle(username, project, app, bundle) {
+    return new Promise((resolve, reject) => {
+        let form = new FormData();
+        form.append("username", username);
+        form.append("project", project);
+        form.append("app", app);
+        form.append("bundle", fs.createReadStream(bundle));
+        form.submit("http://localhost:8080/upload", (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
 }
 
 function zipBundle(directory) {
     return function() {
         return new Promise((resolve, reject) => {
-            zipFolder(directory, `${directory}.zip`, (err) => {
+            let bundle = `${directory}.zip`;
+            zipFolder(directory, bundle, (err) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(bundle);
                 }
             });
         });
@@ -183,4 +206,6 @@ function webpackConfig(sourceWatcher, project, app, dir) {
     };
 }
 
-publish("demo", "prompt");
+publish("krisj", "test", "index")
+    .then(() => console.log("Done!"))
+    .catch((e) => console.error(e));
