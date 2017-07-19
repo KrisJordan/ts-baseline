@@ -10,17 +10,14 @@
   "dependencies": {
     "express": "^4.15.3",
     "glob": "^7.1.2",
+    "introcs": "^0.0.7",
     "open": "0.0.5",
     "pug": "^2.0.0-rc.2",
     "ts-loader": "^2.1.0",
-    "typescript": "^2.3.4",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.4.5",
-    "introcs": "^0.0.5"
-  },
-  "devDependencies": {
-    "express": "^4.15.3",
-    "pug": "^2.0.0-rc.2"
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1"
   }
 }
