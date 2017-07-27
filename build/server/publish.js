@@ -8,7 +8,7 @@ const mkdirp = require("mkdirp");
 const FormData = require('form-data');
 const Promise = require("bluebird");
 
-function publish(username, project, app) {
+function publish(token, project, app) {
     return new Promise( (resolve, reject) => {
         let date = getDateString();
         let timestamp = Math.floor(Date.now() / 1000);
@@ -25,16 +25,16 @@ function publish(username, project, app) {
             .then(bundleSources(sourceWatcher, srcDir))
             .then(generateHtml(project, app, publicDir))
             .then(zipBundle(targetDir))
-            .then((bundle) => publishBundle(username, project, app, bundle))
+            .then((bundle) => publishBundle(token, project, app, bundle))
             .then(resolve)
             .catch(reject);
     });
 }
 
-function publishBundle(username, project, app, bundle) {
+function publishBundle(token, project, app, bundle) {
     return new Promise((resolve, reject) => {
         let form = new FormData();
-        form.append("username", username);
+        form.append("token", token);
         form.append("project", project);
         form.append("app", app);
         form.append("bundle", fs.createReadStream(bundle));
@@ -42,7 +42,17 @@ function publishBundle(username, project, app, bundle) {
             if (err) {
                 reject(err);
             } else {
-                resolve();
+                let body = "";
+                res.on("data", (chunk) => body += chunk);
+                res.on("end", () => {
+                    if (res.statusCode === 200) {
+                        resolve(JSON.parse(body));
+                    } else {
+                        console.log(body);
+                        reject(JSON.parse(body));
+                    }
+                });
+                res.on("error", (e) => reject(e));
             }
         });
     });
@@ -206,6 +216,4 @@ function webpackConfig(sourceWatcher, project, app, dir) {
     };
 }
 
-publish("krisj", "test", "index")
-    .then(() => console.log("Done!"))
-    .catch((e) => console.error(e));
+module.exports = publish;

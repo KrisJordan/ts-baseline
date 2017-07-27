@@ -1,11 +1,12 @@
 extends layout.pug
 
 block nav
-    a(href="/") Home
-    |
-    | /
-    |
-    strong= title
+    div.breadcrumbs
+        span.home
+            a(href="/") Home
+        span.separator /
+        span.project
+            strong= title
 
 block content
     ul.directory

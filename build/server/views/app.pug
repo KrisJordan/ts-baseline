@@ -15,15 +15,17 @@ block meta
     meta(name="apple-mobile-web-app-status-bar-style" content="black")
 
 block nav
-    a(href="/") Home
-    |
-    | /
-    |
-    a(href=projectPath)= projectTitle
-    |
-    | /
-    |
-    strong= title
+    div.breadcrumbs
+        span.home
+            a(href="/") Home
+        span.separator /
+        span.project
+            a(href=projectPath)= projectTitle
+        span.separator /
+        span.title
+            strong= title
+    div.actions
+        a.btn.publish(href=`http://localhost:8080/publish-token${appPath}`,target="_blank") Publish App
 
 block content
     #container

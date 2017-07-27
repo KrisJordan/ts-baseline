@@ -15,6 +15,8 @@ var glob = require("glob");
 
 var open = require("open");
 
+const publish = require("./publish");
+
 let server = null;
 
 app.use(express.static(publicPath));
@@ -33,7 +35,7 @@ if (!isProduction) {
   // to webpack-dev-server
   app.all('/dist/*', function (req, res) {
     proxy.web(req, res, {
-        target: 'http://localhost:8080'
+        target: 'http://localhost:3001'
     });
   });
 
@@ -88,6 +90,25 @@ if (!isProduction) {
     }, {});
   }
 
+  app.get("/publish/:project/:app", (req, res, next) => {
+    publish(req.query.token, req.params.project, req.params.app)
+    .then((uri) => res.redirect(`/published/${req.params.project}/${req.params.app}?uri=${uri}`))
+    .catch(err => res.redirect(`/published/${req.params.project}/${req.params.app}?error=${err}`))
+    ;
+  });
+
+  app.get("/published/:project/:app", (req, res, next) => {
+    if (req.query.error) {
+      res.render('publishedError', {error: req.query.error});
+    } else {
+       res.render('published', {
+         uri: req.query.uri,
+         project: req.params.project, 
+         app: req.params.app
+      });
+    }
+  });
+
   app.get("/:project", function(req, res, next) {
     let props = req.params;
     fs.access(`./src/${props.project}`, fs.constants.F_OK, (err) => {
@@ -126,7 +147,8 @@ if (!isProduction) {
           props.title = english(props.app);
           props.projectTitle = english(props.project);
           props.projectPath = `/${props.project}`;
-          res.render('program', props);
+          props.appPath = `/${props.project}/${props.app}`;
+          res.render('app', props);
         });
       }
     });
