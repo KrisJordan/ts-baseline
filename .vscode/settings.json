@@ -10,6 +10,7 @@
         "**/.vscode": true,
         "**/.gitignore": true,
         "**/build": true,
+        "**/lib": true,
         "package.json": true,
         "tsconfig.json": true,
         "tslint.json": true

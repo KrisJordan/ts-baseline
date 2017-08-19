@@ -15,7 +15,7 @@ var glob = require("glob");
 
 var open = require("open");
 
-const publish = require("./publish");
+let buildPipeline = require("./buildPipeline");
 
 let server = null;
 
@@ -91,9 +91,11 @@ if (!isProduction) {
   }
 
   app.get("/publish/:project/:app", (req, res, next) => {
-    publish(req.query.token, req.params.project, req.params.app)
-    .then((uri) => res.redirect(`/published/${req.params.project}/${req.params.app}?uri=${uri}`))
-    .catch(err => res.redirect(`/published/${req.params.project}/${req.params.app}?error=${err}`))
+    let {project, app} = req.params;
+    let {token} = req.query;
+    buildPipeline.publish(buildPipeline.bundle(project, app), token)
+    .then((state) => res.redirect(`/published/${project}/${app}?uri=${state.publishUrl}`))
+    .catch(err => res.redirect(`/published/${project}/${app}?error=${err}`))
     ;
   });
 
